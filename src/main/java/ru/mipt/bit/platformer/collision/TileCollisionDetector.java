@@ -2,7 +2,6 @@ package ru.mipt.bit.platformer.collision;
 
 import ru.mipt.bit.platformer.model.Direction;
 import ru.mipt.bit.platformer.model.World;
-import ru.mipt.bit.platformer.model.TileGrid;
 import com.badlogic.gdx.math.GridPoint2;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
@@ -14,7 +13,7 @@ public class TileCollisionDetector implements CollisionDetector {
         if (!world.getTileGrid().isValidPosition(target)) {
             return false;
         }
-        return !world.getObstacles().contains(target);
+        return !world.hasObstacleAt(target);
     }
 
     private GridPoint2 getTargetPosition(GridPoint2 from, Direction direction) {

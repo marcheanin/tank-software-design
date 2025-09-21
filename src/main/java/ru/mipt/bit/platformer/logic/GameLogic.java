@@ -7,8 +7,6 @@ import ru.mipt.bit.platformer.model.GridUtils;
 import ru.mipt.bit.platformer.model.World;
 
 public class GameLogic {
-    private static final float MOVEMENT_SPEED = 0.4f;
-
     private final CollisionDetector collisionDetector;
 
     public GameLogic(CollisionDetector collisionDetector) {
@@ -30,7 +28,7 @@ public class GameLogic {
     }
 
     public void updateWorld(World world, float deltaTime) {
-        world.getPlayer().updateProgress(deltaTime, MOVEMENT_SPEED);
+        world.getPlayer().updateProgress(deltaTime);
     }
 
     private float getRotationForDirection(Direction direction) {

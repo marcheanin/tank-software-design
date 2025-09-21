@@ -66,8 +66,8 @@ public class GameScreen implements Screen {
         TileMovement tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
         TileGrid tileGrid = new TileGrid(groundLayer);
 
-        Set<GridPoint2> obstacles = new HashSet<>();
-        obstacles.add(new GridPoint2(1, 3)); // дерево
+        Set<Obstacle> obstacles = new HashSet<>();
+        obstacles.add(new Obstacle(new GridPoint2(1, 3), ObstacleType.TREE)); // дерево
 
         Player player = new Player(new GridPoint2(1, 1));
         world = new World(player, obstacles, tileGrid);
