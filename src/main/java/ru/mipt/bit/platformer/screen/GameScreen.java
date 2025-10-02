@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
         // Создание игрового мира
         TiledMapTileLayer groundLayer = getSingleLayer(level);
         TileMovement tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
-        TileGrid tileGrid = new TileGrid(groundLayer);
+        TileGrid tileGrid = new TileGrid(groundLayer.getWidth(), groundLayer.getHeight());
 
         Set<Obstacle> obstacles = new HashSet<>();
         obstacles.add(new Obstacle(new GridPoint2(1, 3), ObstacleType.TREE)); // дерево
@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
         levelRenderer = new LevelRenderer(createSingleLayerMapRenderer(level, batch));
 
         PlayerRenderer playerRenderer = new PlayerRenderer(new TextureRegion(blueTankTexture));
-        ObstacleRenderer obstacleRenderer = new ObstacleRenderer(new TextureRegion(greenTreeTexture));
+        ObstacleRenderer obstacleRenderer = new ObstacleRenderer(new TextureRegion(greenTreeTexture), groundLayer);
         entityRenderer = new EntityRenderer(tileMovement, playerRenderer, obstacleRenderer);
     }
 
