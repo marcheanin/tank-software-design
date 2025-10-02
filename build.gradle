@@ -2,6 +2,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id 'application'
+    id 'java'
 }
 
 apply from: 'versions.gradle'
@@ -9,8 +10,11 @@ apply from: 'versions.gradle'
 group 'ru.mipt.bit'
 version '1.0-SNAPSHOT'
 
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
 application {
-    mainClassName = 'ru.mipt.bit.platformer.GameDesktopLauncher'
+    mainClass = 'ru.mipt.bit.platformer.GameDesktopLauncher'
     if (Os.isFamily(Os.FAMILY_MAC)) {
         applicationDefaultJvmArgs = ['-XstartOnFirstThread']
     }
@@ -24,4 +28,11 @@ dependencies {
     implementation deps.gdx.gdx
     implementation deps.gdx.backend_lwjgl3
     implementation deps.gdx.platform_desktop
+    
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
 }
