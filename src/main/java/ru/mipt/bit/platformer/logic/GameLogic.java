@@ -23,20 +23,11 @@ public class GameLogic {
 
         if (collisionDetector.canMove(world, currentPos, direction)) {
             world.getPlayer().setDestination(target);
-            world.getPlayer().setRotation(getRotationForDirection(direction));
+            world.getPlayer().setRotation(direction.rotation());
         }
     }
 
     public void updateWorld(World world, float deltaTime) {
         world.getPlayer().updateProgress(deltaTime);
-    }
-
-    private float getRotationForDirection(Direction direction) {
-        return switch (direction) {
-            case UP -> 90f;
-            case LEFT -> -180f;
-            case DOWN -> -90f;
-            case RIGHT -> 0f;
-        };
     }
 }
