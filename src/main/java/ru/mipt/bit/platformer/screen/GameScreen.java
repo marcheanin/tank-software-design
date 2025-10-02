@@ -15,6 +15,7 @@ import ru.mipt.bit.platformer.util.TileMovement;
 
 import ru.mipt.bit.platformer.input.InputController;
 import ru.mipt.bit.platformer.input.GdxKeyboardInputController;
+import ru.mipt.bit.platformer.input.InputAction;
 import ru.mipt.bit.platformer.model.*;
 import ru.mipt.bit.platformer.logic.GameLogic;
 import ru.mipt.bit.platformer.collision.TileCollisionDetector;
@@ -91,7 +92,12 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
 
         // Обработка ввода и игровой логики
-        input.pollMove().ifPresent(direction -> gameLogic.processMoveCommand(world, direction));
+        for (var event : input.poll()) {
+            switch(event.getAction()) {
+                case MOVE -> event.getDirection().ifPresent(dir -> gameLogic.processMoveCommand(world, dir));
+                case SHOOT -> gameLogic.processShootCommand(world);
+            }
+        }
         gameLogic.updateWorld(world, delta);
 
         // Рендеринг

@@ -30,4 +30,6 @@ public class GameLogic {
     public void updateWorld(World world, float deltaTime) {
         world.getPlayer().updateProgress(deltaTime);
     }
+
+    public void processShootCommand(World world) {} // для будущей стрельбы
 }
