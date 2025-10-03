@@ -10,8 +10,10 @@ apply from: 'versions.gradle'
 group 'ru.mipt.bit'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 application {
     mainClass = 'ru.mipt.bit.platformer.GameDesktopLauncher'
