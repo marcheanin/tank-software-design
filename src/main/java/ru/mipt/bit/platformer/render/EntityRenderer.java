@@ -26,7 +26,7 @@ public class EntityRenderer {
         playerRenderer.render(player, batch, tileMovement);
 
         for (Obstacle obstacle : world.getObstacles()) {
-            obstacleRenderer.render(obstacle.getPosition(), batch, world.getTileGrid());
+            obstacleRenderer.render(obstacle.getPosition(), batch);
         }
 
         batch.end();

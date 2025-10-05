@@ -13,7 +13,7 @@ public class Obstacle {
     public Obstacle(GridPoint2 position, ObstacleType type) {
         this.position = new GridPoint2(position);
         this.type = type;
-        this.isPassable = type == ObstacleType.TREE; // деревья непроходимы
+        this.isPassable = type != ObstacleType.TREE; // деревья непроходимы (баг баг баг был)
     }
 
     public GridPoint2 getPosition() {
