@@ -10,10 +10,10 @@ public class Obstacle {
     private final ObstacleType type;
     private final boolean isPassable;
 
-    public Obstacle(GridPoint2 position, ObstacleType type) {
+    public Obstacle(GridPoint2 position, ObstacleType type, boolean isPassable) {
         this.position = new GridPoint2(position);
         this.type = type;
-        this.isPassable = type != ObstacleType.TREE; // деревья непроходимы (баг баг баг был)
+        this.isPassable = isPassable;
     }
 
     public GridPoint2 getPosition() {

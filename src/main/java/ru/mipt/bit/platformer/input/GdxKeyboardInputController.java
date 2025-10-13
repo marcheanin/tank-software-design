@@ -4,9 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import ru.mipt.bit.platformer.model.Direction;
 import java.util.Collection;
-
-import java.util.Optional;
-import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 

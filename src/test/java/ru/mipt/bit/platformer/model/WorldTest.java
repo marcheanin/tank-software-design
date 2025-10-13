@@ -18,10 +18,10 @@ class WorldTest {
 
     @BeforeEach
     void setUp() {
-        player = new Player(new GridPoint2(1, 1));
+        player = new Player(new GridPoint2(1, 1), 100f, 0.4f);
         obstacles = new HashSet<>();
-        obstacles.add(new Obstacle(new GridPoint2(2, 2), ObstacleType.TREE));
-        obstacles.add(new Obstacle(new GridPoint2(3, 3), ObstacleType.WALL));
+        obstacles.add(new Obstacle(new GridPoint2(2, 2), ObstacleType.TREE, false));
+        obstacles.add(new Obstacle(new GridPoint2(3, 3), ObstacleType.WALL, true));
         tileGrid = new TileGrid(10, 10);
         world = new World(player, obstacles, tileGrid);
     }

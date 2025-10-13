@@ -31,7 +31,7 @@ class GameLogicTest {
     void setUp() {
         gameLogic = new GameLogic(collisionDetector);
         
-        player = new Player(new GridPoint2(2, 2));
+        player = new Player(new GridPoint2(2, 2), 100f, 0.4f);
         Set<Obstacle> obstacles = new HashSet<>();
         TileGrid tileGrid = new TileGrid(5, 5);
         world = new World(player, obstacles, tileGrid);

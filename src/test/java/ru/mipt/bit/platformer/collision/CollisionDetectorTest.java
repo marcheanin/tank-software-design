@@ -28,7 +28,7 @@ class CollisionDetectorTest {
         
         assertNotNull(collisionDetector);
 
-        Player player = new Player(new GridPoint2(1, 1));
+        Player player = new Player(new GridPoint2(1, 1), 100f, 0.4f);
         Set<Obstacle> obstacles = new HashSet<>();
         TileGrid tileGrid = new TileGrid(5, 5);
         World world = new World(player, obstacles, tileGrid);
@@ -51,7 +51,7 @@ class CollisionDetectorTest {
                     return true;
                 });
         
-        Player player = new Player(new GridPoint2(1, 1));
+        Player player = new Player(new GridPoint2(1, 1), 100f, 0.4f);
         Set<Obstacle> obstacles = new HashSet<>();
         TileGrid tileGrid = new TileGrid(5, 5);
         World world = new World(player, obstacles, tileGrid);
@@ -70,7 +70,7 @@ class CollisionDetectorTest {
         when(collisionDetector.canMove(any(World.class), any(GridPoint2.class), eq(Direction.DOWN)))
                 .thenReturn(false);
         
-        Player player = new Player(new GridPoint2(1, 1));
+        Player player = new Player(new GridPoint2(1, 1), 100f, 0.4f);
         Set<Obstacle> obstacles = new HashSet<>();
         TileGrid tileGrid = new TileGrid(5, 5);
         World world = new World(player, obstacles, tileGrid);
@@ -87,7 +87,7 @@ class CollisionDetectorTest {
         when(collisionDetector.canMove(any(World.class), any(GridPoint2.class), any(Direction.class)))
                 .thenReturn(true);
         
-        Player player = new Player(new GridPoint2(1, 1));
+        Player player = new Player(new GridPoint2(1, 1), 100f, 0.4f);
         Set<Obstacle> obstacles = new HashSet<>();
         TileGrid tileGrid = new TileGrid(5, 5);
         World world = new World(player, obstacles, tileGrid);

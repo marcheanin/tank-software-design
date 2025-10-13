@@ -23,10 +23,10 @@ public class TileCollisionDetectorTest {
     @BeforeEach
     void setUp(){
         detector = new TileCollisionDetector();
-        player = new Player(new GridPoint2(2, 2));
+        player = new Player(new GridPoint2(2, 2), 100f, 0.4f);
         obstacles = new HashSet<>();
-        obstacles.add(new Obstacle(new GridPoint2(3, 2), ObstacleType.TREE));
-        obstacles.add(new Obstacle(new GridPoint2(1, 2), ObstacleType.WALL));
+        obstacles.add(new Obstacle(new GridPoint2(3, 2), ObstacleType.TREE, false));
+        obstacles.add(new Obstacle(new GridPoint2(1, 2), ObstacleType.WALL, true));
 
         tileGrid = new TileGrid(5, 5);
 
