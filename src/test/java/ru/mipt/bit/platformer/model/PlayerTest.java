@@ -14,7 +14,7 @@ class PlayerTest {
     @BeforeEach
     void setUp() {
         startPosition = new GridPoint2(2, 3);
-        player = new Player(startPosition);
+        player = new Player(startPosition, 100f, 0.4f);
     }
 
     @Test

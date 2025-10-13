@@ -14,13 +14,9 @@ import ru.mipt.bit.platformer.assets.IAssetManager;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import ru.mipt.bit.platformer.input.InputController;
-import ru.mipt.bit.platformer.input.GdxKeyboardInputController;
-import ru.mipt.bit.platformer.input.InputAction;
 import ru.mipt.bit.platformer.model.*;
 import ru.mipt.bit.platformer.logic.GameLogic;
-import ru.mipt.bit.platformer.collision.TileCollisionDetector;
 import ru.mipt.bit.platformer.render.*;
-import ru.mipt.bit.platformer.assets.GdxAssetManager;
 import ru.mipt.bit.platformer.assets.AssetKeys;
 import java.util.Set;
 import java.util.HashSet;
@@ -38,23 +34,28 @@ public class GameScreen implements Screen {
     private Texture greenTreeTexture;
 
     // Игровая логика
-    private InputController input;
+    private final InputController input;
     private World world;
-    private GameLogic gameLogic;
+    private final GameLogic gameLogic;
 
     // Рендеринг
     private LevelRenderer levelRenderer;
     private EntityRenderer entityRenderer;
 
     // Управление ресурсами
-    private IAssetManager assetManager;
+    private final IAssetManager assetManager;
+
+    public GameScreen(IAssetManager assetManager, GameLogic gameLogic, InputController input) {
+        this.assetManager = assetManager;
+        this.gameLogic = gameLogic;
+        this.input = input;
+    }
 
     @Override
     public void show() {
         batch = new SpriteBatch();
 
         // Загрузка ресурсов
-        assetManager = new GdxAssetManager();
         assetManager.loadAssets();
 
         // Получение ресурсов
@@ -68,14 +69,10 @@ public class GameScreen implements Screen {
         TileGrid tileGrid = new TileGrid(groundLayer.getWidth(), groundLayer.getHeight());
 
         Set<Obstacle> obstacles = new HashSet<>();
-        obstacles.add(new Obstacle(new GridPoint2(1, 3), ObstacleType.TREE)); // дерево
+        obstacles.add(new Obstacle(new GridPoint2(1, 3), ObstacleType.TREE, false)); // дерево непроходимо
 
-        Player player = new Player(new GridPoint2(1, 1));
+        Player player = new Player(new GridPoint2(1, 1), 100f, 0.4f);
         world = new World(player, obstacles, tileGrid);
-
-        // Инициализация игровой логики
-        gameLogic = new GameLogic(new TileCollisionDetector());
-        input = new GdxKeyboardInputController();
 
         // Создание рендереров
         levelRenderer = new LevelRenderer(createSingleLayerMapRenderer(level, batch));

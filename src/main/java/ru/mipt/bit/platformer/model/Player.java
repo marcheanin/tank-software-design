@@ -14,13 +14,13 @@ public class Player {
     private float currentHealth;
     private final float movementSpeed;
 
-    public Player(GridPoint2 startCoordinates) {
+    public Player(GridPoint2 startCoordinates, float maxHealth, float movementSpeed) {
         this.coordinates = new GridPoint2(startCoordinates);
         this.destinationCoordinates = new GridPoint2(startCoordinates);
         this.rotation = 0f;
-        this.maxHealth = 100f;
+        this.maxHealth = maxHealth;
         this.currentHealth = maxHealth;
-        this.movementSpeed = 0.4f;
+        this.movementSpeed = movementSpeed;
     }
 
     public GridPoint2 getCoordinates() {

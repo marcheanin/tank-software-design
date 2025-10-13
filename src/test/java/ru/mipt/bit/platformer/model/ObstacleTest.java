@@ -10,15 +10,16 @@ class ObstacleTest {
     @Test
     void constructor_shouldSetPositionAndType() {
         GridPoint2 position = new GridPoint2(2, 3);
-        Obstacle obstacle = new Obstacle(position, ObstacleType.TREE);
+        Obstacle obstacle = new Obstacle(position, ObstacleType.TREE, false);
         
         assertEquals(position, obstacle.getPosition());
         assertEquals(ObstacleType.TREE, obstacle.getType());
+        assertFalse(obstacle.isPassable());
     }
 
     @Test
     void isPassable_shouldReturnFalseForTree() {
-        Obstacle tree = new Obstacle(new GridPoint2(1, 1), ObstacleType.TREE);
+        Obstacle tree = new Obstacle(new GridPoint2(1, 1), ObstacleType.TREE, false);
         
         assertFalse(tree.isPassable());
         assertTrue(tree.isTree());
@@ -27,7 +28,7 @@ class ObstacleTest {
 
     @Test
     void isPassable_shouldReturnTrueForWall() {
-        Obstacle wall = new Obstacle(new GridPoint2(1, 1), ObstacleType.WALL);
+        Obstacle wall = new Obstacle(new GridPoint2(1, 1), ObstacleType.WALL, true);
         
         assertTrue(wall.isPassable());
         assertFalse(wall.isTree());
@@ -37,7 +38,7 @@ class ObstacleTest {
     @Test
     void getPosition_shouldReturnCopy() {
         GridPoint2 originalPosition = new GridPoint2(5, 7);
-        Obstacle obstacle = new Obstacle(originalPosition, ObstacleType.TREE);
+        Obstacle obstacle = new Obstacle(originalPosition, ObstacleType.TREE, false);
         
         GridPoint2 returnedPosition = obstacle.getPosition();
         returnedPosition.x = 999; // мутируем копию
@@ -51,10 +52,10 @@ class ObstacleTest {
         GridPoint2 position2 = new GridPoint2(2, 3);
         GridPoint2 position3 = new GridPoint2(4, 5);
         
-        Obstacle obstacle1 = new Obstacle(position1, ObstacleType.TREE);
-        Obstacle obstacle2 = new Obstacle(position2, ObstacleType.TREE);
-        Obstacle obstacle3 = new Obstacle(position3, ObstacleType.TREE);
-        Obstacle obstacle4 = new Obstacle(position1, ObstacleType.WALL);
+        Obstacle obstacle1 = new Obstacle(position1, ObstacleType.TREE, false);
+        Obstacle obstacle2 = new Obstacle(position2, ObstacleType.TREE, false);
+        Obstacle obstacle3 = new Obstacle(position3, ObstacleType.TREE, false);
+        Obstacle obstacle4 = new Obstacle(position1, ObstacleType.WALL, true);
         
         assertEquals(obstacle1, obstacle2); // одинаковые позиция и тип
         assertNotEquals(obstacle1, obstacle3); // разные позиции
@@ -66,8 +67,8 @@ class ObstacleTest {
     @Test
     void hashCode_shouldBeConsistentWithEquals() {
         GridPoint2 position = new GridPoint2(2, 3);
-        Obstacle obstacle1 = new Obstacle(position, ObstacleType.TREE);
-        Obstacle obstacle2 = new Obstacle(position, ObstacleType.TREE);
+        Obstacle obstacle1 = new Obstacle(position, ObstacleType.TREE, false);
+        Obstacle obstacle2 = new Obstacle(position, ObstacleType.TREE, false);
         
         assertEquals(obstacle1.hashCode(), obstacle2.hashCode());
     }
@@ -75,7 +76,7 @@ class ObstacleTest {
     @Test
     void toString_shouldContainPositionAndType() {
         GridPoint2 position = new GridPoint2(2, 3);
-        Obstacle obstacle = new Obstacle(position, ObstacleType.TREE);
+        Obstacle obstacle = new Obstacle(position, ObstacleType.TREE, false);
         String toString = obstacle.toString();
         
         assertTrue(toString.contains("2, 3"));
