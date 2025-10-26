@@ -14,6 +14,8 @@ import ru.mipt.bit.platformer.assets.IAssetManager;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import ru.mipt.bit.platformer.input.InputController;
+import ru.mipt.bit.platformer.level.LevelLoader;
+import ru.mipt.bit.platformer.level.LevelLoadingException;
 import ru.mipt.bit.platformer.model.*;
 import ru.mipt.bit.platformer.logic.GameLogic;
 import ru.mipt.bit.platformer.render.*;
@@ -28,15 +30,14 @@ public class GameScreen implements Screen {
 
     private Batch batch;
 
-    // Игровые ресурсы
     private TiledMap level;
     private Texture blueTankTexture;
     private Texture greenTreeTexture;
 
-    // Игровая логика
     private final InputController input;
     private World world;
     private final GameLogic gameLogic;
+    private final LevelLoader levelLoader;
 
     // Рендеринг
     private LevelRenderer levelRenderer;
@@ -45,10 +46,11 @@ public class GameScreen implements Screen {
     // Управление ресурсами
     private final IAssetManager assetManager;
 
-    public GameScreen(IAssetManager assetManager, GameLogic gameLogic, InputController input) {
+    public GameScreen(IAssetManager assetManager, GameLogic gameLogic, InputController input, LevelLoader levelLoader) {
         this.assetManager = assetManager;
         this.gameLogic = gameLogic;
         this.input = input;
+        this.levelLoader = levelLoader;
     }
 
     @Override
@@ -68,11 +70,11 @@ public class GameScreen implements Screen {
         TileMovement tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
         TileGrid tileGrid = new TileGrid(groundLayer.getWidth(), groundLayer.getHeight());
 
-        Set<Obstacle> obstacles = new HashSet<>();
-        obstacles.add(new Obstacle(new GridPoint2(1, 3), ObstacleType.TREE, false)); // дерево непроходимо
-
-        Player player = new Player(new GridPoint2(1, 1), 100f, 0.4f);
-        world = new World(player, obstacles, tileGrid);
+        try {
+            world = levelLoader.loadLevel(tileGrid);
+        } catch (LevelLoadingException e) {
+            throw new RuntimeException("Failed to load level", e);
+        }
 
         // Создание рендереров
         levelRenderer = new LevelRenderer(createSingleLayerMapRenderer(level, batch));
