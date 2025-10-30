@@ -19,6 +19,7 @@ public class GdxAssetManager implements IAssetManager {
     public void loadAssets() {
         // Загружаем текстуры
         gdxAssetManager.load(AssetKeys.PLAYER_TANK, Texture.class);
+        gdxAssetManager.load(AssetKeys.PLAYER_TANK_RED, Texture.class);
         gdxAssetManager.load(AssetKeys.TREE_OBSTACLE, Texture.class);
 
         // Загружаем карту

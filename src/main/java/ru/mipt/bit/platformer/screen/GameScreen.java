@@ -33,6 +33,7 @@ public class GameScreen implements Screen {
 
     private TiledMap level;
     private Texture blueTankTexture;
+    private Texture redTankTexture;
     private Texture greenTreeTexture;
 
     private final InputController input;
@@ -59,40 +60,15 @@ public class GameScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
 
-        // Загрузка ресурсов
-        assetManager.loadAssets();
+        loadAssets();
 
-        // Получение ресурсов
-        level = assetManager.getTiledMap(AssetKeys.LEVEL);
-        blueTankTexture = assetManager.getTexture(AssetKeys.PLAYER_TANK);
-        greenTreeTexture = assetManager.getTexture(AssetKeys.TREE_OBSTACLE);
-
-        // Создание игрового мира
         TiledMapTileLayer groundLayer = getSingleLayer(level);
         TileMovement tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
         TileGrid tileGrid = new TileGrid(groundLayer.getWidth(), groundLayer.getHeight());
 
-        try {
-            world = levelLoader.loadLevel(tileGrid);
-        } catch (LevelLoadingException e) {
-            throw new RuntimeException("Failed to load level", e);
-        }
-
-        int botsToCreate = 3;
-        float botMaxHealth = world.getPlayer().getMaxHealth();
-        float botSpeed = world.getPlayer().getMovementSpeed();
-        for (int i = 0; i < botsToCreate; i++) {
-            GridPoint2 pos = findFreeCell(tileGrid);
-            if (pos == null) break;
-            world.getAiTanks().add(new Player(pos, botMaxHealth, botSpeed));
-        }
-
-        // Создание рендереров
-        levelRenderer = new LevelRenderer(createSingleLayerMapRenderer(level, batch));
-
-        PlayerRenderer playerRenderer = new PlayerRenderer(new TextureRegion(blueTankTexture));
-        ObstacleRenderer obstacleRenderer = new ObstacleRenderer(new TextureRegion(greenTreeTexture), groundLayer);
-        entityRenderer = new EntityRenderer(tileMovement, playerRenderer, obstacleRenderer);
+        initWorld(tileGrid);
+        spawnBots(tileGrid);
+        buildRenderers(groundLayer, tileMovement);
     }
 
     @Override
@@ -101,24 +77,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
 
-        List<ru.mipt.bit.platformer.command.Command> commands = new ArrayList<>();
-        for (var event : input.poll()) {
-            switch(event.getAction()) {
-                case MOVE -> event.getDirection().ifPresent(dir ->
-                        commands.add(new ru.mipt.bit.platformer.command.MoveCommand(world.getPlayer(), dir))
-                );
-                case SHOOT -> gameLogic.processShootCommand(world);
-            }
-        }
-
-        for (Player bot : world.getAiTanks()) {
-            if (!bot.isMoving()) {
-                Direction[] dirs = Direction.values();
-                Direction dir = dirs[random.nextInt(dirs.length)];
-                commands.add(new ru.mipt.bit.platformer.command.MoveCommand(bot, dir));
-            }
-        }
-
+        List<ru.mipt.bit.platformer.command.Command> commands = collectCommands();
         gameLogic.processCommands(world, commands);
         gameLogic.updateWorld(world, delta);
 
@@ -169,5 +128,61 @@ public class GameScreen implements Screen {
             if (!occupied) return p;
         }
         return null;
+    }
+
+    private void loadAssets() {
+        assetManager.loadAssets();
+        level = assetManager.getTiledMap(AssetKeys.LEVEL);
+        blueTankTexture = assetManager.getTexture(AssetKeys.PLAYER_TANK);
+        redTankTexture = assetManager.getTexture(AssetKeys.PLAYER_TANK_RED);
+        greenTreeTexture = assetManager.getTexture(AssetKeys.TREE_OBSTACLE);
+    }
+
+    private void initWorld(TileGrid tileGrid) {
+        try {
+            world = levelLoader.loadLevel(tileGrid);
+        } catch (LevelLoadingException e) {
+            throw new RuntimeException("Failed to load level", e);
+        }
+    }
+
+    private void spawnBots(TileGrid tileGrid) {
+        int botsToCreate = 3;
+        float botMaxHealth = world.getPlayer().getMaxHealth();
+        float botSpeed = world.getPlayer().getMovementSpeed();
+        for (int i = 0; i < botsToCreate; i++) {
+            GridPoint2 pos = findFreeCell(tileGrid);
+            if (pos == null) break;
+            world.getAiTanks().add(new Player(pos, botMaxHealth, botSpeed));
+        }
+    }
+
+    private void buildRenderers(TiledMapTileLayer groundLayer, TileMovement tileMovement) {
+        levelRenderer = new LevelRenderer(createSingleLayerMapRenderer(level, batch));
+        PlayerRenderer playerRenderer = new PlayerRenderer(new TextureRegion(redTankTexture));
+        PlayerRenderer botRenderer = new PlayerRenderer(new TextureRegion(blueTankTexture));
+        ObstacleRenderer obstacleRenderer = new ObstacleRenderer(new TextureRegion(greenTreeTexture), groundLayer);
+        entityRenderer = new EntityRenderer(tileMovement, playerRenderer, botRenderer, obstacleRenderer);
+    }
+
+    private List<ru.mipt.bit.platformer.command.Command> collectCommands() {
+        List<ru.mipt.bit.platformer.command.Command> commands = new ArrayList<>();
+        for (var event : input.poll()) {
+            switch(event.getAction()) {
+                case MOVE -> event.getDirection().ifPresent(dir ->
+                        commands.add(new ru.mipt.bit.platformer.command.MoveCommand(world.getPlayer(), dir))
+                );
+                case SHOOT -> gameLogic.processShootCommand(world);
+            }
+        }
+
+        for (Player bot : world.getAiTanks()) {
+            if (!bot.isMoving()) {
+                Direction[] dirs = Direction.values();
+                Direction dir = dirs[random.nextInt(dirs.length)];
+                commands.add(new ru.mipt.bit.platformer.command.MoveCommand(bot, dir));
+            }
+        }
+        return commands;
     }
 }

@@ -9,14 +9,17 @@ import ru.mipt.bit.platformer.util.TileMovement;
 public class EntityRenderer {
 
     private final PlayerRenderer playerRenderer;
+    private final PlayerRenderer botRenderer;
     private final ObstacleRenderer obstacleRenderer;
     private final TileMovement tileMovement;
 
     public EntityRenderer(TileMovement tileMovement,
                           PlayerRenderer playerRenderer,
+                          PlayerRenderer botRenderer,
                           ObstacleRenderer obstacleRenderer) {
         this.tileMovement = tileMovement;
         this.playerRenderer = playerRenderer;
+        this.botRenderer = botRenderer;
         this.obstacleRenderer = obstacleRenderer;
     }
 
@@ -26,7 +29,7 @@ public class EntityRenderer {
         playerRenderer.render(player, batch, tileMovement);
 
         for (Player bot : world.getAiTanks()) {
-            playerRenderer.render(bot, batch, tileMovement);
+            botRenderer.render(bot, batch, tileMovement);
         }
 
         for (Obstacle obstacle : world.getObstacles()) {
