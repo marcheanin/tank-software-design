@@ -44,6 +44,8 @@ public class GameScreen implements Screen {
     // Рендеринг
     private LevelRenderer levelRenderer;
     private EntityRenderer entityRenderer;
+    private HealthBarRenderer playerHealthRenderer;
+    private HealthBarRenderer botHealthRenderer;
 
     // Управление ресурсами
     private final IAssetManager assetManager;
@@ -109,6 +111,12 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         assetManager.dispose();
+        if (playerHealthRenderer != null) {
+            playerHealthRenderer.dispose();
+        }
+        if (botHealthRenderer != null) {
+            botHealthRenderer.dispose();
+        }
         batch.dispose();
     }
 
@@ -159,10 +167,12 @@ public class GameScreen implements Screen {
 
     private void buildRenderers(TiledMapTileLayer groundLayer, TileMovement tileMovement) {
         levelRenderer = new LevelRenderer(createSingleLayerMapRenderer(level, batch));
-        PlayerRenderer playerRenderer = new PlayerRenderer(new TextureRegion(redTankTexture));
-        PlayerRenderer botRenderer = new PlayerRenderer(new TextureRegion(blueTankTexture));
+        PlayerRenderer basePlayerRenderer = new PlayerRenderer(new TextureRegion(redTankTexture));
+        PlayerRenderer baseBotRenderer = new PlayerRenderer(new TextureRegion(blueTankTexture));
+        playerHealthRenderer = new HealthBarRenderer(basePlayerRenderer, world::isHealthBarsVisible);
+        botHealthRenderer = new HealthBarRenderer(baseBotRenderer, world::isHealthBarsVisible);
         ObstacleRenderer obstacleRenderer = new ObstacleRenderer(new TextureRegion(greenTreeTexture), groundLayer);
-        entityRenderer = new EntityRenderer(tileMovement, playerRenderer, botRenderer, obstacleRenderer);
+        entityRenderer = new EntityRenderer(tileMovement, playerHealthRenderer, botHealthRenderer, obstacleRenderer);
     }
 
     private List<ru.mipt.bit.platformer.command.Command> collectCommands() {
@@ -173,6 +183,7 @@ public class GameScreen implements Screen {
                         commands.add(new ru.mipt.bit.platformer.command.MoveCommand(world.getPlayer(), dir))
                 );
                 case SHOOT -> gameLogic.processShootCommand(world);
+                case TOGGLE_HEALTH -> commands.add(new ru.mipt.bit.platformer.command.ToggleHealthBarsCommand());
             }
         }
 

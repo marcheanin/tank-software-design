@@ -20,6 +20,10 @@ public final class InputEvent {
         return new InputEvent(InputAction.SHOOT, null);
     }
 
+    public static InputEvent toggleHealth() {
+        return new InputEvent(InputAction.TOGGLE_HEALTH, null);
+    }
+
     public InputAction getAction() {
         return action;
     }
