@@ -33,6 +33,10 @@ public final class GdxKeyboardInputController implements InputController {
             events.add(InputEvent.shoot());
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            events.add(InputEvent.toggleHealth());
+        }
+
         return events;
     }
     

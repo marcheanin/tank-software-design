@@ -8,14 +8,14 @@ import ru.mipt.bit.platformer.util.TileMovement;
 
 public class EntityRenderer {
 
-    private final PlayerRenderer playerRenderer;
-    private final PlayerRenderer botRenderer;
+    private final TankRenderer playerRenderer;
+    private final TankRenderer botRenderer;
     private final ObstacleRenderer obstacleRenderer;
     private final TileMovement tileMovement;
 
     public EntityRenderer(TileMovement tileMovement,
-                          PlayerRenderer playerRenderer,
-                          PlayerRenderer botRenderer,
+                          TankRenderer playerRenderer,
+                          TankRenderer botRenderer,
                           ObstacleRenderer obstacleRenderer) {
         this.tileMovement = tileMovement;
         this.playerRenderer = playerRenderer;

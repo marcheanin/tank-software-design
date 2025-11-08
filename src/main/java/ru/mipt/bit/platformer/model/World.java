@@ -9,12 +9,14 @@ public class World {
     private final Set<Obstacle> obstacles;
     private final TileGrid tileGrid;
     private final Set<Player> aiTanks;
+    private boolean healthBarsVisible;
 
     public World(Player player, Set<Obstacle> obstacles, TileGrid tileGrid) {
         this.player = player;
         this.obstacles = obstacles;
         this.tileGrid = tileGrid;
         this.aiTanks = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+        this.healthBarsVisible = false;
     }
 
     public World(Player player, Set<Obstacle> obstacles, TileGrid tileGrid, Set<Player> aiTanks) {
@@ -22,6 +24,7 @@ public class World {
         this.obstacles = obstacles;
         this.tileGrid = tileGrid;
         this.aiTanks = new java.util.HashSet<>(aiTanks);
+        this.healthBarsVisible = false;
     }
 
     public Player getPlayer() {
@@ -51,6 +54,18 @@ public class World {
         all.add(player);
         all.addAll(aiTanks);
         return all;
+    }
+
+    public boolean isHealthBarsVisible() {
+        return healthBarsVisible;
+    }
+
+    public void toggleHealthBars() {
+        healthBarsVisible = !healthBarsVisible;
+    }
+
+    public void setHealthBarsVisible(boolean visible) {
+        this.healthBarsVisible = visible;
     }
 
     public boolean hasObstacleAt(GridPoint2 position) {

@@ -7,7 +7,7 @@ import ru.mipt.bit.platformer.model.Player;
 import ru.mipt.bit.platformer.util.TileMovement;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
-public class PlayerRenderer {
+public class PlayerRenderer implements TankRenderer {
     private final TextureRegion playerGraphics;
     private final Rectangle playerRectangle;
 
@@ -16,7 +16,8 @@ public class PlayerRenderer {
         this.playerRectangle = createBoundingRectangle(playerGraphics);
     }
 
-    public void render(Player player, Batch batch, TileMovement tileMovement) {
+    @Override
+    public Rectangle render(Player player, Batch batch, TileMovement tileMovement) {
         tileMovement.moveRectangleBetweenTileCenters(
                 playerRectangle,
                 player.getCoordinates(),
@@ -25,5 +26,6 @@ public class PlayerRenderer {
         );
 
         drawTextureRegionUnscaled(batch, playerGraphics, playerRectangle, player.getRotation());
+        return playerRectangle;
     }
 }
