@@ -172,7 +172,8 @@ public class GameScreen implements Screen {
         playerHealthRenderer = new HealthBarRenderer(basePlayerRenderer, world::isHealthBarsVisible);
         botHealthRenderer = new HealthBarRenderer(baseBotRenderer, world::isHealthBarsVisible);
         ObstacleRenderer obstacleRenderer = new ObstacleRenderer(new TextureRegion(greenTreeTexture), groundLayer);
-        entityRenderer = new EntityRenderer(tileMovement, playerHealthRenderer, botHealthRenderer, obstacleRenderer);
+        BulletRenderer bulletRenderer = new BulletRenderer(32f);
+        entityRenderer = new EntityRenderer(tileMovement, playerHealthRenderer, botHealthRenderer, obstacleRenderer, bulletRenderer);
     }
 
     private List<ru.mipt.bit.platformer.command.Command> collectCommands() {
@@ -182,16 +183,22 @@ public class GameScreen implements Screen {
                 case MOVE -> event.getDirection().ifPresent(dir ->
                         commands.add(new ru.mipt.bit.platformer.command.MoveCommand(world.getPlayer(), dir))
                 );
-                case SHOOT -> gameLogic.processShootCommand(world);
+                case SHOOT -> commands.add(new ru.mipt.bit.platformer.command.ShootCommand(
+                        world.getPlayer(), gameLogic.getBulletSpeed(), gameLogic.getBulletDamage()));
                 case TOGGLE_HEALTH -> commands.add(new ru.mipt.bit.platformer.command.ToggleHealthBarsCommand());
             }
         }
 
         for (Player bot : world.getAiTanks()) {
-            if (!bot.isMoving()) {
-                Direction[] dirs = Direction.values();
-                Direction dir = dirs[random.nextInt(dirs.length)];
-                commands.add(new ru.mipt.bit.platformer.command.MoveCommand(bot, dir));
+            if (!bot.isMoving() && bot.isAlive()) {
+                if (random.nextFloat() < 0.3f) {
+                    commands.add(new ru.mipt.bit.platformer.command.ShootCommand(
+                            bot, gameLogic.getBulletSpeed(), gameLogic.getBulletDamage()));
+                } else {
+                    Direction[] dirs = Direction.values();
+                    Direction dir = dirs[random.nextInt(dirs.length)];
+                    commands.add(new ru.mipt.bit.platformer.command.MoveCommand(bot, dir));
+                }
             }
         }
         return commands;
