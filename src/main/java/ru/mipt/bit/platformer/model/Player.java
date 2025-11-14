@@ -88,4 +88,19 @@ public class Player {
     public float getHealthPercentage() {
         return currentHealth / maxHealth;
     }
+
+    public Direction getFacingDirection() {
+        for (Direction dir : Direction.values()) {
+            if (Math.abs(dir.rotation() - rotation) < 0.1f) {
+                return dir;
+            }
+        }
+        return Direction.RIGHT;
+    }
+
+    public Bullet shoot(float bulletSpeed, float bulletDamage) {
+        Direction facing = getFacingDirection();
+        GridPoint2 bulletStart = GridUtils.move(coordinates, facing);
+        return new Bullet(bulletStart, facing, bulletSpeed, bulletDamage);
+    }
 }
