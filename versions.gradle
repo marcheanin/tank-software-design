@@ -1,5 +1,6 @@
 def versions = [:]
 versions.gdx = '1.9.11'
+versions.spring = '5.3.31'
 
 def deps = [:]
 
@@ -8,5 +9,10 @@ gdx.gdx = "com.badlogicgames.gdx:gdx:$versions.gdx"
 gdx.backend_lwjgl3 = "com.badlogicgames.gdx:gdx-backend-lwjgl3:$versions.gdx"
 gdx.platform_desktop = "com.badlogicgames.gdx:gdx-platform:$versions.gdx:natives-desktop"
 deps.gdx = gdx
+
+def spring = [:]
+spring.context = "org.springframework:spring-context:$versions.spring"
+spring.core = "org.springframework:spring-core:$versions.spring"
+deps.spring = spring
 
 ext.deps = deps

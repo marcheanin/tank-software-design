@@ -31,6 +31,9 @@ dependencies {
     implementation deps.gdx.backend_lwjgl3
     implementation deps.gdx.platform_desktop
     
+    implementation deps.spring.context
+    implementation deps.spring.core
+    
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.mockito:mockito-core:4.11.0'
